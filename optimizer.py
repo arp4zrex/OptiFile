@@ -8,15 +8,17 @@ import shutil
 from pydub import AudioSegment
 from pydub.utils import which
 import threading
+from tkinter import END
+from tkinter import messagebox
 
 AudioSegment.converter = which("ffmpeg")
 AudioSegment.ffprobe = which("ffprobe")
 
 def update_progress_bar(progress_bar, file_label, progress):
     progress_bar['value'] = progress
-    file_label.config(text=f"Optimizing... {progress}%")
+    file_label.config(text=f"Optimizando... {progress}%")
     if progress >= 100:
-        messagebox.showinfo("Success", "File optimized successfully")
+        messagebox.showinfo("Éxito", "Archivo optimizado correctamente")
 
 def optimize_image(input_path, output_path):
     with Image.open(input_path) as img:
@@ -53,7 +55,7 @@ def optimize_file(input_path, output_path, progress_bar, file_label, progress_fr
     mime_type, _ = mimetypes.guess_type(input_path)
     if mime_type:
         progress_bar['value'] = 0
-        file_label.config(text="Optimizing... 0%")
+        file_label.config(text="Optimizando... 0%")
         progress_frame.pack()
 
         steps = 10
@@ -70,22 +72,22 @@ def optimize_file(input_path, output_path, progress_bar, file_label, progress_fr
             elif mime_type.startswith('audio/'):
                 optimize_audio(input_path, output_path)
             else:
-                file_label.config(text=f"Unsupported file type: {mime_type}")
+                file_label.config(text=f"Tipo de archivo no compatible: {mime_type}")
                 return False
 
             for i in range(steps):
                 threading.Event().wait(0.5)
                 progress_bar.step(step_progress)
-                file_label.config(text=f"Optimizing... {int((i + 1) * step_progress)}%")
+                file_label.config(text=f"Optimizando... {int((i + 1) * step_progress)}%")
         except Exception as e:
             file_label.config(text=f"Error: {str(e)}")
             return False
 
         progress_bar['value'] = 100
-        file_label.config(text="Optimization complete")
+        file_label.config(text="Optimización completa")
         progress_frame.pack_forget()
 
-        optimized_folder = "Optimized Files"
+        optimized_folder = "Archivos Optimizados"
         if not os.path.exists(optimized_folder):
             os.makedirs(optimized_folder)
 
@@ -96,13 +98,14 @@ def optimize_file(input_path, output_path, progress_bar, file_label, progress_fr
 
         return True
     else:
-        file_label.config(text="Could not determine file type")
+        file_label.config(text="No se pudo determinar el tipo de archivo")
         return False
 
 def start_optimization(input_path, progress_bar, file_label, progress_frame, output_listbox):
-    optimized_folder = "Optimized Files"
+    optimized_folder = "Archivos Optimizados"
     if not os.path.exists(optimized_folder):
         os.makedirs(optimized_folder)
 
     output_path = os.path.join(optimized_folder, os.path.basename(input_path))
     threading.Thread(target=optimize_file, args=(input_path, output_path, progress_bar, file_label, progress_frame, output_listbox)).start()
+
