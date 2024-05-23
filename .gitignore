@@ -4,5 +4,3 @@ __pycache__
 # Ignorar archivos generados por Python
 *.pyc
 
-# Ignorar archivos de imagen
-*.png
