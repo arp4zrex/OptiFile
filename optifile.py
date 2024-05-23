@@ -31,7 +31,7 @@ def create_gui():
 
     created_by_label.pack(pady=5)
 
-    original_logo = Image.open("alien_logo.png")
+    original_logo = Image.open("logo.png")
     resized_logo = original_logo.resize((300, 300))
     logo = ImageTk.PhotoImage(resized_logo)
     logo_label = Label(root, image=logo)
