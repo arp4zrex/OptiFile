@@ -27,7 +27,7 @@ def create_gui():
 
     app_name_label.pack(pady=10)
 
-    created_by_label = ttk.Label(root, text="Created by arp4zrex", font=("Helvetica", 9, "bold"), foreground="black")
+    created_by_label = ttk.Label(root, text="Created by arp4zrex/arp4hack", font=("Helvetica", 9, "bold"), foreground="black")
 
     created_by_label.pack(pady=5)
 
