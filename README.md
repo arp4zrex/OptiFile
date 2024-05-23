@@ -47,4 +47,4 @@ Contributions to OptiFile are welcome! If you have any improvements or bug fixes
 If you encounter any problems or have suggestions for improving OptiFile, please open an issue on the GitHub repository. Your feedback is valuable in helping us improve the application.
 
 ##License
-OptiFile is licensed under the MIT License. Feel free to use and modify the code according to the terms of the license.
+OptiFile is licensed under the Apache License. Feel free to use and modify the code according to the terms of the license.
