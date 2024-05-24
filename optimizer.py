@@ -8,7 +8,9 @@ import shutil
 from pydub import AudioSegment
 from pydub.utils import which
 import threading
+from tkinter import messagebox, END
 
+# Set ffmpeg and ffprobe paths for pydub
 AudioSegment.converter = which("ffmpeg")
 AudioSegment.ffprobe = which("ffprobe")
 
@@ -33,10 +35,8 @@ def optimize_video(input_path, output_path):
 def optimize_pdf(input_path, output_path):
     reader = PyPDF2.PdfReader(input_path)
     writer = PyPDF2.PdfWriter()
-
     for page in reader.pages:
         writer.add_page(page)
-
     with open(output_path, 'wb') as output_pdf:
         writer.write(output_pdf)
 
@@ -58,6 +58,7 @@ def optimize_file(input_path, output_path, progress_bar, file_label, progress_fr
 
         steps = 10
         step_progress = 100 / steps
+
         try:
             if mime_type.startswith('image/'):
                 optimize_image(input_path, output_path)
@@ -66,7 +67,8 @@ def optimize_file(input_path, output_path, progress_bar, file_label, progress_fr
             elif mime_type == 'application/pdf':
                 optimize_pdf(input_path, output_path)
             elif mime_type.startswith('text/'):
-                optimize_text(input_path, output_path + '.gz')
+                output_path += '.gz'
+                optimize_text(input_path, output_path)
             elif mime_type.startswith('audio/'):
                 optimize_audio(input_path, output_path)
             else:
@@ -90,9 +92,11 @@ def optimize_file(input_path, output_path, progress_bar, file_label, progress_fr
             os.makedirs(optimized_folder)
 
         final_output_path = os.path.join(optimized_folder, os.path.basename(output_path))
-        shutil.move(output_path, final_output_path)
-
-        output_listbox.insert(END, final_output_path)
+        if os.path.exists(output_path):
+            shutil.move(output_path, final_output_path)
+            output_listbox.insert(END, final_output_path)
+        else:
+            file_label.config(text="Error: Optimized file not found")
 
         return True
     else:
